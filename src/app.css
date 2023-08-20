@@ -15,9 +15,10 @@ body {
         "main"
         "footer";
     height: 100vh;
+    background-color: #FFF7ED;
 }
 
-nav {
+header {
     grid-area: header;
     display: flex;
     justify-content: space-between;
@@ -41,31 +42,34 @@ footer {
 
 /****** nav area ******/
 
-nav a {
-    text-decoration: none;
-}
-
 .main-header-link {
     color: black;
     font-size: 25px;
     font-weight: 900;
 }
 
-.sec-header-links-cont {
+nav {
     display: flex;
     gap: 10px;
 }
 
-.sec-header-links-cont a {
+header a,
+nav a {
     color: #4D4D4D;
     font-weight: 600;
+    text-decoration: none;
 }
 
+nav .activePage {
+    color: #FF8C38;
+}
 
 /****** main area ******/
 
+/**** home page ****/
 .home-main {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.46)), url("./assets/home-bg.png") no-repeat center center;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.46)),
+        url("./assets/home-bg.png") no-repeat center center;
     background-size: cover;
     color: #FFF;
     display: flex;
@@ -97,6 +101,7 @@ nav a {
     margin-top: 50px;
 }
 
+/**** about page ****/
 .about-hero-img {
     width: 100%;
 }
@@ -127,4 +132,71 @@ nav a {
     text-decoration: none;
     color: white;
     background-color: #161616;
+}
+
+/**** vans page ****/
+.vans-selection-cont {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
+    align-items: start;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.van-cont {
+    max-width: 250px;
+    justify-self: center;
+}
+
+.van-img {
+    width: 100%;
+}
+
+.van-cont>p {
+    margin: 0;
+}
+
+.van-details-cont {
+    display: flex;
+    justify-content: space-between;
+}
+
+.van-details-cont h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.van-details-cont>p {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.host-vans-cont {
+    padding: 50px 30px;
+}
+
+.host-vans-cont>a {
+    display: block;
+    max-width: 400px;
+    margin-block: 10px;
+}
+
+.host-vans-cont>a>div {
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px;
+    background-color: #FFF;
+}
+
+.host-vans-cont img {
+    max-width: 100px;
+}
+
+.host-van-cont>div {
+    display: flex;
+    gap: 15px;
+    margin-block: 25px;
+
 }
