@@ -1,22 +1,23 @@
-import { createContext, useState, useEffect } from "react"
+import { NavLink, Link, Outlet, useLoaderData } from "react-router-dom"
 
-import { NavLink, Link, Outlet, useParams } from "react-router-dom"
+import { requireAuth } from "../../../utils"
 
-const HostVanContext = createContext()
+import { getHostVans } from "../../../fetches"
+
+export async function loader({ params }) {
+    await requireAuth()
+    return getHostVans(params.id)
+}
 
 function HostVanLayout() {
-    const [van, setVan] = useState(null)
-    const params = useParams()
 
-    useEffect(() => {
-        fetch(`/api/host/vans/${params.id}`)
-            .then(res => res.json())
-            .then(data => setVan(data.vans))
-    }, [params])
+    const van = useLoaderData()
 
     return (
         <div className='host-vans-cont'>
-            <Link to="/host/vans">back to vans</Link>
+            <Link to="../vans">
+                back to vans
+            </Link>
 
             {
                 van ?
@@ -30,21 +31,17 @@ function HostVanLayout() {
                             </div>
                         </div>
                         <nav>
-                            <NavLink to={`/host/vans/${van.id}`} end className={({ isActive }) => isActive ? "activePage" : null}>Details</NavLink>
-                            <NavLink to={`/host/vans/${van.id}/pricing`} className={({ isActive }) => isActive ? "activePage" : null}>Pricing</NavLink>
-                            <NavLink to={`/host/vans/${van.id}/photos`} className={({ isActive }) => isActive ? "activePage" : null}>Photos</NavLink>
+                            <NavLink to="." end className={({ isActive }) => isActive ? "activePage" : null}>Details</NavLink>
+                            <NavLink to={`pricing`} className={({ isActive }) => isActive ? "activePage" : null}>Pricing</NavLink>
+                            <NavLink to={`photos`} className={({ isActive }) => isActive ? "activePage" : null}>Photos</NavLink>
                         </nav>
                     </div>
                     :
                     null
             }
-            <HostVanContext.Provider value={van}>
-                <Outlet />
-            </HostVanContext.Provider>
+            <Outlet context={van} />
         </div>
     )
 }
 
 export default HostVanLayout
-
-export { HostVanContext }

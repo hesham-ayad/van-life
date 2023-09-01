@@ -1,13 +1,16 @@
-import { useContext } from "react";
+import { useOutletContext } from "react-router-dom";
 
-import { HostVanContext } from "./HostVanLayout";
 
 function HostVanPhotos() {
-    const { imageUrl } = useContext(HostVanContext) || {}
 
-    return (
-        <img src={imageUrl} max-width="150px" alt="" />
-    )
+    const { imageUrl } = useOutletContext() || {}
+
+    return imageUrl ?
+        (
+            <img src={imageUrl} max-width="150px" alt="" />
+        )
+        :
+        <h6>loading ...</h6>
 }
 
 export default HostVanPhotos

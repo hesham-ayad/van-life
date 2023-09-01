@@ -1,46 +1,105 @@
-import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useLoaderData } from "react-router-dom"
+
+import { getVans } from "../../fetches";
+
+export function loader() {
+    return getVans()
+}
 
 function Vans() {
 
-    const [vans, setVans] = useState([])
+    const vans = useLoaderData()
+    const [searchParams, setSearchParams] = useSearchParams()
+    const typeFilter = searchParams.get("type")
 
-    useEffect(() => {
-        fetch('api/vans')
-        .then(res => res.json())
-        .then(data => setVans(data.vans))
-    }, [])
-    
-    const vansJsx = vans.length ?
-    vans.map(van => {
-        return (
-            <div className='van-cont' key={van.id}>
-                <Link to={`/vans/${van.id}`}>
-                    <img className='van-img' src={van.imageUrl} alt={`picture of the ${van.name} van`} />
-                    <div className='van-details-cont'>
-                        <h2>{van.name}</h2>
-                        <p>
-                            <span>${van.price}</span>
-                            <span>/day</span>
-                        </p>
-                    </div>
-                </Link>
-                <p>{van.type}</p>
-            </div>
-        )
-    })
-    :
-    null
+    const filtredVansArr = typeFilter
+        ? vans.filter(van => van.type === typeFilter)
+        : vans
+
+
+
+    const vansJsxArr = filtredVansArr.map(van => {
+            return (
+                <div className='van-cont' key={van.id}>
+                    <Link
+                        to={van.id}
+                        state={searchParams.size
+                            ? {
+                                search: searchParams.toString(),
+                                searchFilterType: typeFilter
+                            }
+                            : null
+                        }
+                    >
+
+                        <img className='van-img'
+                            src={van.imageUrl}
+                            title={`a picture of the ${van.name} van`}
+                            alt={`a picture of the ${van.name} van`}
+                        />
+
+                        <div className='van-details-cont'>
+                            <h2>{van.name}</h2>
+                            <p>
+                                <span>${van.price}</span>
+                                <span>/day</span>
+                            </p>
+                        </div>
+                    </Link>
+                    <p>{van.type}</p>
+                </div>
+            )
+        })
+       
+
+    function handleFilterChange(key, value) {
+        setSearchParams(prevParams => {
+            if (value === null) {
+                prevParams.delete(key)
+            } else {
+                prevParams.set(key, value)
+            }
+            return prevParams
+        })
+    }
 
     return (
         <main className='vans-main'>
+            <div className='vans-filter-cont'>
+
+                {
+                    typeFilter ?
+                        <button onClick={() => handleFilterChange("type", null)} type='button' >clear filter</button>
+                        : null
+                }
+
+                <button className={typeFilter === 'simple' ? 'selected' : null}
+                    onClick={() => handleFilterChange("type", "simple")}
+                    type='button' >
+                    simple
+                </button>
+
+                <button className={typeFilter === 'rugged' ? 'selected' : null}
+                    onClick={() => handleFilterChange("type", "rugged")}
+                    type='button' >
+                    rugged
+                </button>
+
+                <button className={typeFilter === 'luxury' ? 'selected' : null}
+                    onClick={() => handleFilterChange("type", "luxury")}
+                    type='button' >
+                    luxury
+                </button>
+            </div>
+
             <h1>Check out our vans</h1>
+
             <div className='vans-selection-cont'>
                 {
-                    vansJsx !== null ?
-                    vansJsx
-                    :
-                    null
+                    vansJsxArr !== null ?
+                        vansJsxArr
+                        :
+                        null
                 }
             </div>
         </main>

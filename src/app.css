@@ -200,3 +200,7 @@ nav .activePage {
     margin-block: 25px;
 
 }
+
+.vans-filter-cont button, .vans-filter-cont a  {
+    margin: 10px;
+}

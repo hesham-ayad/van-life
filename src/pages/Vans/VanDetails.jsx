@@ -1,34 +1,33 @@
-import { useEffect, useState } from "react"
+import { Link, useLocation, useLoaderData } from "react-router-dom"
 
-import { useParams, Link } from "react-router-dom"
+import { getVans } from "../../fetches";
+
+export function loader({ params }) {
+    return getVans(params.id)
+}
+
 
 function VanDetails() {
 
-    const [vanDets, setVanDets] = useState({})
-    const params = useParams()
-
-    useEffect(() => {
-        fetch(`/api/vans/${params.id}`)
-        .then(res => res.json())
-        .then(data => setVanDets(data.vans))
-    }, [params ])
+    const location = useLocation()
+    const vanDets = useLoaderData()
 
     return (
         <main className='vanDetails-main'>
-            <Link to='/vans'>Back to all vans</Link>
-            {
-                vanDets ?
-                <div>
-                    <img src={vanDets.imageUrl} alt="van picture" />
-                    <p>{vanDets.type}</p>
-                    <p>{vanDets.name}</p>
-                    <p>${vanDets.price}/day</p>
-                    <p>{vanDets.description}</p>
-                    <button>Rent this van</button>
-                </div>
-                :
-                <h2>Loading...</h2>
-            }
+            <Link
+                to={location.state ? `..?${location.state.search}` : '..'}
+                relative="path"
+            >
+                Back to {location.state?.searchFilterType ? `all ${location.state.searchFilterType}` : 'all'} vans
+            </Link>
+            <div>
+                <img src={vanDets.imageUrl} alt="van picture" />
+                <p>{vanDets.type}</p>
+                <p>{vanDets.name}</p>
+                <p>${vanDets.price}/day</p>
+                <p>{vanDets.description}</p>
+                <button>Rent this van</button>
+            </div>
         </main>
     )
 }
