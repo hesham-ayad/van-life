@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
 import "./app.css"
 
-import Login, { loader as LoginLoader } from "./Login";
+import Login, { loader as loginLoader, action as loginAction } from "./Login";
 import Error from "./Error"
 import { requireAuth } from "./utils";
 
@@ -23,8 +23,8 @@ import HostVanDetails from "./host/vans/HostVan/HostVanDetails"
 import HostVanPricing from "./host/vans/HostVan/HostVanPricing"
 import HostVanPhotos from "./host/vans/HostVan/HostVanPhotos"
 
-async function authReq() {
-  return await requireAuth()
+async function authReq(request) {
+  return await requireAuth(request)
 }
 
 const router = createBrowserRouter([
@@ -55,22 +55,22 @@ const router = createBrowserRouter([
       {
         path: "host",
         element: <HostLayout />,
-        loader: async () => authReq(),
+        loader: async ({request}) => authReq(request),
         children: [
           {
             index: true,
             element: <Dashboard />,
-            loader: async () => authReq()
+            loader: async ({request}) => authReq(request)
           },
           {
             path: "income",
             element: <Income />,
-            loader: async () => authReq()
+            loader: async ({request}) => authReq(request)
           },
           {
             path: "reviews",
             element: <Reviews />,
-            loader: async () => authReq()
+            loader: async ({request}) => authReq(request)
           },
           {
             path: "vans",
@@ -85,17 +85,17 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <HostVanDetails />,
-                loader: async () => authReq()
+                loader: async ({request}) => authReq(request)
               },
               {
                 path: "pricing",
                 element: <HostVanPricing />,
-                loader: async () => authReq()
+                loader: async ({request}) => authReq(request)
               },
               {
                 path: "photos",
                 element: <HostVanPhotos />,
-                loader: async () => authReq()
+                loader: async ({request}) => authReq(request)
               }
             ]
           }
@@ -104,7 +104,8 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-        loader: LoginLoader
+        loader: loginLoader,
+        action: loginAction
       },
       {
         path: "*",

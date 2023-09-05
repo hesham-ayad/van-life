@@ -4,8 +4,8 @@ import { requireAuth } from "../../utils";
 
 import { getHostVans } from "../../fetches";
 
-export async function loader() {
-    await requireAuth()
+export async function loader({ request }) {
+    await requireAuth(request)
     return getHostVans()
 }
 
