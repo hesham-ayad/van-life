@@ -75,12 +75,14 @@ const router = createBrowserRouter([
           {
             path: "vans",
             element: <HostVans />,
-            loader: hostVansLoader
+            loader: hostVansLoader,
+            errorElement: <Error />
           },
           {
             path: "vans/:id",
             element: <HostVanLayout />,
             loader: hostVanDetsLoader,
+            errorElement: <Error />,
             children: [
               {
                 index: true,

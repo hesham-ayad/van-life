@@ -1,24 +1,28 @@
-import { Link, useSearchParams, useLoaderData } from "react-router-dom"
+import { Suspense } from "react";
+
+import { Link, Await, useSearchParams, useLoaderData, defer } from "react-router-dom"
 
 import { getVans } from "../../fetches";
 
 export function loader() {
-    return getVans()
+
+    return defer({ vans: getVans() })
 }
 
 function Vans() {
 
-    const vans = useLoaderData()
+    const vansPromise = useLoaderData()
     const [searchParams, setSearchParams] = useSearchParams()
     const typeFilter = searchParams.get("type")
 
-    const filtredVansArr = typeFilter
-        ? vans.filter(van => van.type === typeFilter)
-        : vans
+    function renderVans(vans) {
+        const filtredVansArr = typeFilter
+            ? vans.filter(van => van.type === typeFilter)
+            : vans
 
 
 
-    const vansJsxArr = filtredVansArr.map(van => {
+        const vansJsxArr = filtredVansArr.map(van => {
             return (
                 <div className='van-cont' key={van.id}>
                     <Link
@@ -50,7 +54,21 @@ function Vans() {
                 </div>
             )
         })
-       
+
+        return (
+            <div className='vans-selection-cont'>
+                {
+                    vansJsxArr !== null ?
+                        vansJsxArr
+                        :
+                        null
+                }
+            </div>
+        )
+    }
+
+
+
 
     function handleFilterChange(key, value) {
         setSearchParams(prevParams => {
@@ -94,14 +112,11 @@ function Vans() {
 
             <h1>Check out our vans</h1>
 
-            <div className='vans-selection-cont'>
-                {
-                    vansJsxArr !== null ?
-                        vansJsxArr
-                        :
-                        null
-                }
-            </div>
+            <Suspense fallback={<p>Loading...</p>}>
+                <Await resolve={vansPromise.vans}>
+                    {renderVans}
+                </Await>
+            </Suspense>
         </main>
     )
 }
