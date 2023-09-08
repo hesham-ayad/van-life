@@ -2,10 +2,10 @@ import { Suspense } from "react";
 
 import { Link, Await, useLocation, useLoaderData, defer } from "react-router-dom"
 
-import { getVans } from "../../fetches";
+import { getVan } from "../../fetches";
 
 export function loader({ params }) {
-    return defer({ vanDets: getVans(params.id) })
+    return defer({ vanDets: getVan(params.id) })
 }
 
 function VanDetails() {
