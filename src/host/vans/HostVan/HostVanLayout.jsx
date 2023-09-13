@@ -10,7 +10,7 @@ export async function loader({ params, request }) {
     return defer({ van: getVan(params.id) })
 }
 
-function HostVanLayout() {
+export function HostVanLayout() {
 
     const vanPromise = useLoaderData()
 
@@ -57,5 +57,3 @@ function HostVanLayout() {
         </div>
     )
 }
-
-export default HostVanLayout

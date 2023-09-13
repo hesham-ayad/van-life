@@ -1,7 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 
-
-function HostVanPhotos() {
+export function HostVanPhotos() {
 
     const { imageUrl } = useOutletContext()
 
@@ -9,5 +8,3 @@ function HostVanPhotos() {
         <img src={imageUrl} max-width="150px" alt="" />
     )
 }
-
-export default HostVanPhotos

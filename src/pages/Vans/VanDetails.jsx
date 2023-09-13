@@ -8,7 +8,7 @@ export function loader({ params }) {
     return defer({ vanDets: getVan(params.id) })
 }
 
-function VanDetails() {
+export function VanDetails() {
 
     const location = useLocation()
     const vanDetsPromise = useLoaderData()
@@ -44,5 +44,3 @@ function VanDetails() {
         </main>
     )
 }
-
-export default VanDetails

@@ -2,26 +2,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
 import "./app.css"
 
-import Login, { loader as loginLoader, action as loginAction } from "./Login";
+import Layout from "./components/Layout"
+
 import Error from "./Error"
+
 import { requireAuth } from "./utils";
 
-import Layout from "./components/Layout"
-import Home from "./pages/Home"
-import About from "./pages/About"
-import Vans, { loader as vansLoader } from "./pages/Vans/Vans"
-import VanDetails, { loader as vanDetsLoader } from "./pages/Vans/VanDetails"
 
-import HostLayout from "./host/HostLayout"
-import Dashboard from "./host/Dashboard"
-import Income from "./host/Income"
-import Reviews from "./host/Reviews"
-
-import HostVans, { loader as hostVansLoader } from "./host/vans/HostVans"
-import HostVanLayout, { loader as hostVanDetsLoader } from "./host/vans/HostVan/HostVanLayout"
-import HostVanDetails from "./host/vans/HostVan/HostVanDetails"
-import HostVanPricing from "./host/vans/HostVan/HostVanPricing"
-import HostVanPhotos from "./host/vans/HostVan/HostVanPhotos"
 
 async function authReq(request) {
   return await requireAuth(request)
@@ -34,70 +21,149 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        async lazy() {
+          let { Home } = await import("./pages/Home")
+
+          return {
+            element: <Home />
+          }
+        }
       },
       {
         path: "about",
-        element: <About />
+        async lazy() {
+          let { About } = await import("./pages/About")
+
+          return {
+            element: <About />
+          }
+        }
       },
       {
         path: "vans",
-        element: <Vans />,
-        loader: vansLoader,
-        errorElement: <Error />
+        errorElement: <Error />,
+        async lazy() {
+          let { Vans, loader } = await import("./pages/Vans/Vans")
+
+          return {
+            element: <Vans />,
+            loader: loader
+          }
+        }
       },
       {
         path: "vans/:id",
-        element: <VanDetails />,
-        loader: vanDetsLoader,
-        errorElement: <Error />
+        errorElement: <Error />,
+        async lazy() {
+          let { VanDetails, loader } = await import("./pages/Vans/VanDetails")
+
+          return {
+            element: <VanDetails />,
+            loader: loader
+          }
+        }
       },
       {
         path: "host",
-        element: <HostLayout />,
-        loader: async ({request}) => authReq(request),
+        async lazy() {
+          let { HostLayout } = await import("./host/HostLayout")
+
+          return {
+            element: <HostLayout />
+          }
+        },
+        loader: async ({ request }) => authReq(request),
         children: [
           {
             index: true,
-            element: <Dashboard />,
-            loader: async ({request}) => authReq(request)
+            async lazy() {
+              let { Dashboard } = await import("./host/Dashboard")
+
+              return {
+                element: <Dashboard />
+              }
+            },
+            loader: async ({ request }) => authReq(request)
           },
           {
             path: "income",
-            element: <Income />,
-            loader: async ({request}) => authReq(request)
+            async lazy() {
+              let { Income } = await import("./host/Income")
+
+              return {
+                element: <Income />
+              }
+            },
+            loader: async ({ request }) => authReq(request)
           },
           {
             path: "reviews",
-            element: <Reviews />,
-            loader: async ({request}) => authReq(request)
+            async lazy() {
+              let { Reviews } = await import("./host/Reviews")
+
+              return {
+                element: <Reviews />
+              }
+            },
+            loader: async ({ request }) => authReq(request)
           },
           {
             path: "vans",
-            element: <HostVans />,
-            loader: hostVansLoader,
-            errorElement: <Error />
+            errorElement: <Error />,
+            async lazy() {
+              let { HostVansList, loader } = await import("./host/vans/HostVans")
+
+              return {
+                element: <HostVansList />,
+                loader: loader
+              }
+            }
           },
           {
             path: "vans/:id",
-            element: <HostVanLayout />,
-            loader: hostVanDetsLoader,
             errorElement: <Error />,
+            async lazy() {
+              let { HostVanLayout, loader } = await import("./host/vans/HostVan/HostVanLayout")
+
+              return {
+                element: <HostVanLayout />,
+                loader: loader
+              }
+            },
             children: [
               {
                 index: true,
-                element: <HostVanDetails />,
-                loader: async ({request}) => authReq(request)
+                async lazy() {
+                  let { HostVanDetails } = await import("./host/vans/HostVan/HostVanDetails")
+
+                  return {
+                    element: <HostVanDetails />
+                  }
+                },
+                loader: async ({ request }) => authReq(request)
               },
               {
                 path: "pricing",
-                element: <HostVanPricing />,
-                loader: async ({request}) => authReq(request)
+                async lazy() {
+                  let { HostVanPricing } = await import("./host/vans/HostVan/HostVanPricing")
+
+                  return {
+                    element: <HostVanPricing />
+                  }
+                },
+                loader: async ({ request }) => authReq(request)
               },
               {
                 path: "photos",
-                element: <HostVanPhotos />,
-                loader: async ({request}) => authReq(request)
+                async lazy() {
+
+                  let { HostVanPhotos } = await import("./host/vans/HostVan/HostVanPhotos")
+
+                  return {
+                    element: <HostVanPhotos />
+                  }
+                },
+                loader: async ({ request }) => authReq(request)
               }
             ]
           }
@@ -105,9 +171,15 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
-        loader: loginLoader,
-        action: loginAction
+        async lazy() {
+          let { Login, loader, action } = await import("./Login")
+
+          return {
+            element: <Login />,
+            loader: loader,
+            action
+          }
+        }
       },
       {
         path: "*",

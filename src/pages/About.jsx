@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import heroImgUrl from "../assets/about-hero.png";
 
-function About() {
+export function About() {
 
     return (
         <main className="about-main">
@@ -28,5 +28,3 @@ function About() {
         </main>
     )
 }
-
-export default About

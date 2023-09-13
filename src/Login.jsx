@@ -31,7 +31,7 @@ export async function action({ request }) {
 }
 
 
-export default function Login() {
+export function Login() {
 
     const errorMsg = useActionData() ?? null
 

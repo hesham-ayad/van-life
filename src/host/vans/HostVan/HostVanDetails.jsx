@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom"
 
-function HostVanDetails() {
+export function HostVanDetails() {
     const { name, type, description } = useOutletContext()
 
     return (
@@ -12,5 +12,3 @@ function HostVanDetails() {
         </div>
     )
 }
-
-export default HostVanDetails

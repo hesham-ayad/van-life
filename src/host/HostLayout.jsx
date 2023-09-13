@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-function HostLayout() {
+export function HostLayout() {
     return (
         <main>
             <nav>
@@ -13,5 +13,3 @@ function HostLayout() {
         </main>
     )
 }
-
-export default HostLayout

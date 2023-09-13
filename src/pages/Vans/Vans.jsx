@@ -9,7 +9,7 @@ export function loader() {
     return defer({ vans: getVans() })
 }
 
-function Vans() {
+export function Vans() {
 
     const vansPromise = useLoaderData()
     const [searchParams, setSearchParams] = useSearchParams()
@@ -120,5 +120,3 @@ function Vans() {
         </main>
     )
 }
-
-export default Vans

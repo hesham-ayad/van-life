@@ -11,7 +11,7 @@ export async function loader({ request }) {
     return defer({ vans: getHostVans() })
 }
 
-function HostVansList() {
+export function HostVansList() {
 
     const vansPromise = useLoaderData()
 
@@ -50,5 +50,3 @@ function HostVansList() {
         </div>
     )
 }
-
-export default HostVansList 
